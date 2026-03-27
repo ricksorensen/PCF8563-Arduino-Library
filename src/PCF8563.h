@@ -30,7 +30,7 @@ class PCF8563
 public:
 
   //general control
-  void init();//initialize the chip
+  void init(TwoWire *twi);//initialize the chip
   void stopClock();//stop the clock
   void startClock();//start the clock
 
@@ -52,6 +52,7 @@ public:
   bool checkClockIntegrity();//check clock integrity
 
 private:
+  TwoWire *myWire = &Wire;
   uint8_t read(uint8_t address);//read one byte from selected register
   void write(uint8_t address, uint8_t data);//write one byte of data to the register
   void write_OR(uint8_t address, uint8_t data);//write data to the register using OR operations

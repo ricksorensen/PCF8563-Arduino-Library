@@ -1,12 +1,13 @@
-#include "PCF8563.h"
 #include "Arduino.h"
+#include "PCF8563.h"
 
 //initialize PCF8563
 //Parameters: none
 //Returns: none
-void PCF8563::init()
+void PCF8563::init(TwoWire *twi=&Wifi)
 {
-  Wire.begin();//initialize the I2C interface
+  myWire = twi;
+  //myWire->begin();//initialize the I2C interface
   write_AND(Control_status_1,~(1<<3));//clear TESTC bit
   write_AND(CLKOUT_control,~(1<<7));//clear CLKOUT enable bit
 }
@@ -183,11 +184,11 @@ void PCF8563::setClkOutputFrequency(output_frequency frequency)
 //Returns: readed byte of data (uint8_t)
 uint8_t PCF8563::read(uint8_t address)
 {
-  Wire.beginTransmission(PCF8563_address);//begin transmission
-  Wire.write(address);//inform chip what register we want to read
-  Wire.endTransmission();
-  Wire.requestFrom(PCF8563_address,1);//request one byte from the chip
-  uint8_t data = Wire.read();//read the data
+  myWire->beginTransmission(PCF8563_address);//begin transmission
+  myWire->write(address);//inform chip what register we want to read
+  myWire->endTransmission();
+  myWire->requestFrom(PCF8563_address,1);//request one byte from the chip
+  uint8_t data = myWire->read();//read the data
   return data;
 }
 
@@ -231,10 +232,10 @@ uint8_t  PCF8563::get_second_number(unsigned short number)
 //Returns: none
 void PCF8563::write(uint8_t address, uint8_t data)
 {
-  Wire.beginTransmission(PCF8563_address);
-  Wire.write(address);
-  Wire.write(data);
-  Wire.endTransmission();
+  myWire->beginTransmission(PCF8563_address);
+  myWire->write(address);
+  myWire->write(data);
+  myWire->endTransmission();
 }
 
 //Change state of the register using OR operation
