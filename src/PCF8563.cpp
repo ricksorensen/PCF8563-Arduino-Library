@@ -4,7 +4,7 @@
 //initialize PCF8563
 //Parameters: none
 //Returns: none
-void PCF8563::init(TwoWire *twi=&Wifi)
+void PCF8563::init(TwoWire *twi=&Wire)
 {
   myWire = twi;
   //myWire->begin();//initialize the I2C interface
